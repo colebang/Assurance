@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Vehicles{% endblock %}
+{% block content %}
+<h1>Vehicles</h1>
+<p><a href="{% url 'underwriting:vehicle_create' %}">New Vehicle</a></p>
+<table class="datatable">
+  <thead>
+    <tr>
+      <th>Plate</th>
+      <th>Insured</th>
+      <th>Make</th>
+      <th>Model</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for vehicle in vehicles %}
+    <tr>
+      <td>{{ vehicle.plate_number }}</td>
+      <td>{{ vehicle.insured }}</td>
+      <td>{{ vehicle.make }}</td>
+      <td>{{ vehicle.model }}</td>
+      <td><a href="{% url 'underwriting:vehicle_update' vehicle.pk %}">Edit</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
