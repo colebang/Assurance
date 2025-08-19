@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Claim {{ claim.public_code }}{% endblock %}
+{% block content %}
+<h2>Claim {{ claim.public_code }}</h2>
+<p>Assuré: {{ claim.policy.insured }}</p>
+<p>Produit: {{ claim.policy.product.name }}</p>
+<p>Status: {{ claim.status }}</p>
+<table>
+  <thead>
+    <tr><th>Coverage</th><th>Invoice</th><th>Eligible</th><th>Approved</th></tr>
+  </thead>
+  <tbody>
+    {% for line in claim.lines.all %}
+    <tr>
+      <td>{{ line.policy_coverage.coverage.name }}</td>
+      <td>{{ line.line_invoice_amount }}</td>
+      <td>{{ line.line_eligible_amount }}</td>
+      <td>{{ line.line_approved_amount }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<h3>Attachments</h3>
+<ul>
+  {% for att in claim.attachments.all %}
+  <li>{{ att.file.name }}</li>
+  {% endfor %}
+</ul>
+{% if claim.status == 'SUBMITTED' %}
+<form action="{% url 'claims:claim_approve' claim.pk %}" method="post" style="display:inline">
+  {% csrf_token %}
+  <button type="submit">Approve</button>
+</form>
+<form action="{% url 'claims:claim_reject' claim.pk %}" method="post" style="display:inline">
+  {% csrf_token %}
+  <button type="submit">Reject</button>
+</form>
+{% endif %}
+{% endblock %}

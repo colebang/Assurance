@@ -25,6 +25,7 @@ urlpatterns = [
     path('catalog/', include('catalog.urls')),
     path('crm/', include('crm.urls')),
     path('underwriting/', include('underwriting.urls')),
+    path('claims/', include('claims.urls')),
     path('admin/', admin.site.urls),
 ]
 
