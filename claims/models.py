@@ -52,6 +52,13 @@ class Claim(models.Model):
     def approved_amount(self):  # pragma: no cover - simple alias
         return self.reimbursable_amount
 
+    class Meta:
+        permissions = [
+            ("approve_claim", "Peut approuver un sinistre"),
+            ("reject_claim", "Peut rejeter un sinistre"),
+            ("mark_paid_claim", "Peut marquer payé"),
+        ]
+
 
 class ClaimLine(models.Model):
     claim = models.ForeignKey(Claim, related_name="lines", on_delete=models.CASCADE)

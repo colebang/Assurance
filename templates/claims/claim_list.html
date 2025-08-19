@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load accounts_extras %}
 {% block title %}Claims{% endblock %}
 {% block content %}
 <h2>Claims</h2>
@@ -14,7 +15,9 @@
       <th>Produit</th>
       <th>Statut</th>
       <th>Montant facture</th>
+      {% if not user|has_group:'redacteur' %}
       <th>Remboursable</th>
+      {% endif %}
       <th>Déclaré le</th>
       <th>Actions</th>
     </tr>
@@ -27,7 +30,9 @@
       <td>{{ claim.policy.product.name }}</td>
       <td>{{ claim.status }}</td>
       <td>{{ claim.invoice_amount }}</td>
+      {% if not user|has_group:'redacteur' %}
       <td>{{ claim.reimbursable_amount }}</td>
+      {% endif %}
       <td>{{ claim.declared_at }}</td>
       <td><a href="{% url 'claims:claim_detail' claim.pk %}">Detail</a></td>
     </tr>

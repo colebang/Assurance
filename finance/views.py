@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
-
 from django.views.generic import DetailView, FormView, ListView
 from django.db.models import Sum
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
+from accounts.permissions import RoleRequiredMixin
 
 from claims.models import Claim
 
@@ -12,8 +14,9 @@ from .models import Payment, Premium, Receipt
 from .services import pay_claim, receive_premium
 
 
-
-class PaymentCreateView(FormView):
+class PaymentCreateView(RoleRequiredMixin, PermissionRequiredMixin, FormView):
+    required_roles = ("comptable",)
+    permission_required = "finance.pay_claim"
     template_name = "finance/payment_form.html"
     form_class = PaymentForm
 
@@ -42,7 +45,8 @@ class PaymentCreateView(FormView):
         return redirect(reverse("claims:claim_detail", args=[self.claim.pk]))
 
 
-class PaymentListView(ListView):
+class PaymentListView(RoleRequiredMixin, ListView):
+    required_roles = ("comptable",)
     model = Payment
     template_name = "finance/payment_list.html"
     context_object_name = "payments"
@@ -59,7 +63,8 @@ class PaymentListView(ListView):
         return ctx
 
 
-class PremiumListView(ListView):
+class PremiumListView(RoleRequiredMixin, ListView):
+    required_roles = ("comptable",)
     model = Premium
     template_name = "finance/premium_list.html"
     context_object_name = "premiums"
@@ -76,7 +81,8 @@ class PremiumListView(ListView):
         return ctx
 
 
-class PremiumDetailView(DetailView):
+class PremiumDetailView(RoleRequiredMixin, DetailView):
+    required_roles = ("comptable",)
     model = Premium
     template_name = "finance/premium_detail.html"
     context_object_name = "premium"
@@ -90,7 +96,9 @@ class PremiumDetailView(DetailView):
         return ctx
 
 
-class ReceiptCreateView(FormView):
+class ReceiptCreateView(RoleRequiredMixin, PermissionRequiredMixin, FormView):
+    required_roles = ("comptable",)
+    permission_required = "finance.receive_premium"
     template_name = "finance/receipt_form.html"
     form_class = ReceiptForm
 
@@ -119,7 +127,8 @@ class ReceiptCreateView(FormView):
         return redirect(reverse("finance:premium_detail", args=[self.premium.pk]))
 
 
-class ReceiptListView(ListView):
+class ReceiptListView(RoleRequiredMixin, ListView):
+    required_roles = ("comptable",)
     model = Receipt
     template_name = "finance/receipt_list.html"
     context_object_name = "receipts"

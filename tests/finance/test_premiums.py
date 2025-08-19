@@ -1,7 +1,9 @@
 import pytest
 from django.core.exceptions import ValidationError
+import pytest
 from django.urls import reverse
 from datetime import date
+from django.contrib.auth.models import User, Group
 
 from catalog.models import Product, Coverage
 from crm.models import Insured
@@ -67,6 +69,11 @@ def test_receipt_exceed_error(policy_active):
 
 @pytest.mark.django_db
 def test_views(client, policy_active):
+    user = User.objects.create_user(username="comp", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="comptable"))
+    assert client.login(username="comp", password="pwd")
     premium = Premium.objects.get(policy=policy_active)
     resp = client.get(reverse("finance:premium_list"))
     assert resp.status_code == 200

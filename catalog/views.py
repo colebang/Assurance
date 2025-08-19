@@ -1,12 +1,15 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 
+from accounts.permissions import RoleRequiredMixin
+
 from .filters import CoverageFilter, ProductFilter
 from .forms import CoverageForm, ProductForm
 from .models import Coverage, Product
 
 
-class ProductListView(ListView):
+class ProductListView(RoleRequiredMixin, ListView):
+    required_roles = ("actuaire",)
     model = Product
     template_name = "catalog/product_list.html"
     context_object_name = "products"
@@ -22,21 +25,24 @@ class ProductListView(ListView):
         return context
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(RoleRequiredMixin, CreateView):
+    required_roles = ("actuaire",)
     model = Product
     form_class = ProductForm
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:product_list")
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(RoleRequiredMixin, UpdateView):
+    required_roles = ("actuaire",)
     model = Product
     form_class = ProductForm
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:product_list")
 
 
-class CoverageListView(ListView):
+class CoverageListView(RoleRequiredMixin, ListView):
+    required_roles = ("actuaire",)
     model = Coverage
     template_name = "catalog/coverage_list.html"
     context_object_name = "coverages"
@@ -52,14 +58,16 @@ class CoverageListView(ListView):
         return context
 
 
-class CoverageCreateView(CreateView):
+class CoverageCreateView(RoleRequiredMixin, CreateView):
+    required_roles = ("actuaire",)
     model = Coverage
     form_class = CoverageForm
     template_name = "catalog/coverage_form.html"
     success_url = reverse_lazy("catalog:coverage_list")
 
 
-class CoverageUpdateView(UpdateView):
+class CoverageUpdateView(RoleRequiredMixin, UpdateView):
+    required_roles = ("actuaire",)
     model = Coverage
     form_class = CoverageForm
     template_name = "catalog/coverage_form.html"

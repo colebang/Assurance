@@ -6,6 +6,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 from datetime import date, datetime
 
+from django.contrib.auth.models import User, Group
+
 from catalog.models import Product, Coverage
 from crm.models import Insured
 from underwriting.models import Policy, PolicyCoverage
@@ -155,6 +157,11 @@ def test_claim_list_view(client, policy):
         incident_at=timezone.make_aware(datetime(2024, 3, 1)),
         invoice_amount=50,
     )
+    user = User.objects.create_user(username="red", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="redacteur"))
+    assert client.login(username="red", password="pwd")
     url = reverse("claims:claim_list")
     resp = client.get(url, {"status": Claim.Status.SUBMITTED})
     assert resp.status_code == 200

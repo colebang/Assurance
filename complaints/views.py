@@ -2,12 +2,21 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.views.generic import ListView, CreateView, DetailView, FormView, View
 
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
+from django.utils import timezone
+from django.views import View
+from django.views.generic import CreateView, DetailView, FormView, ListView
+
+from accounts.permissions import RoleRequiredMixin
+
 from .models import Complaint
 from .forms import ComplaintCreateForm, ComplaintAnswerForm
 from .filters import ComplaintFilter
 
 
-class ComplaintListView(ListView):
+class ComplaintListView(RoleRequiredMixin, ListView):
+    required_roles = ("commercial", "gestionnaire")
     model = Complaint
     template_name = "complaints/complaint_list.html"
     context_object_name = "complaints"
@@ -24,7 +33,8 @@ class ComplaintListView(ListView):
         return ctx
 
 
-class ComplaintCreateView(CreateView):
+class ComplaintCreateView(RoleRequiredMixin, CreateView):
+    required_roles = ("commercial",)
     model = Complaint
     form_class = ComplaintCreateForm
     template_name = "complaints/complaint_form.html"
@@ -33,12 +43,14 @@ class ComplaintCreateView(CreateView):
         return redirect("complaints:complaint_detail", pk=self.object.pk).url
 
 
-class ComplaintDetailView(DetailView):
+class ComplaintDetailView(RoleRequiredMixin, DetailView):
+    required_roles = ("commercial", "gestionnaire")
     model = Complaint
     template_name = "complaints/complaint_detail.html"
 
 
-class ComplaintAnswerView(FormView):
+class ComplaintAnswerView(PermissionRequiredMixin, FormView):
+    permission_required = "complaints.answer_complaint"
     form_class = ComplaintAnswerForm
     template_name = "complaints/complaint_answer_form.html"
 
@@ -61,7 +73,9 @@ class ComplaintAnswerView(FormView):
         return ctx
 
 
-class ComplaintCloseView(View):
+class ComplaintCloseView(PermissionRequiredMixin, View):
+    permission_required = "complaints.close_complaint"
+
     def post(self, request, pk):
         complaint = get_object_or_404(Complaint, pk=pk, status=Complaint.Status.ANSWERED)
         complaint.status = Complaint.Status.CLOSED

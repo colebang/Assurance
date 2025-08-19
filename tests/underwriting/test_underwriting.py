@@ -1,7 +1,9 @@
 import pytest
 from django.db import IntegrityError
+import pytest
 from django.core.exceptions import ValidationError
 from django.urls import reverse
+from django.contrib.auth.models import User, Group
 
 from datetime import date
 
@@ -90,6 +92,11 @@ def test_vehicle_plate_uniqueness(insured):
 
 @pytest.mark.django_db
 def test_policy_list_view(client):
+    user = User.objects.create_user(username="comm", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="commercial"))
+    assert client.login(username="comm", password="pwd")
     url = reverse("underwriting:policy_list")
     resp = client.get(url)
     assert resp.status_code == 200

@@ -1,8 +1,6 @@
 import django_filters
 
-
 from .models import Payment, Premium, Receipt
-
 
 
 class PaymentFilter(django_filters.FilterSet):
@@ -11,7 +9,6 @@ class PaymentFilter(django_filters.FilterSet):
     class Meta:
         model = Payment
         fields = ["mode", "claim__public_code", "paid_at"]
-
 
 
 class PremiumFilter(django_filters.FilterSet):
@@ -28,4 +25,3 @@ class ReceiptFilter(django_filters.FilterSet):
     class Meta:
         model = Receipt
         fields = ["mode", "premium__policy__policy_number", "paid_at"]
-

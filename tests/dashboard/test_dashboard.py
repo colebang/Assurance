@@ -1,7 +1,10 @@
 import pytest
 from django.urls import reverse
+import pytest
 from django.utils import timezone
 from datetime import date, timedelta
+from django.urls import reverse
+from django.contrib.auth.models import User, Group
 
 from catalog.models import Product, Coverage
 from crm.models import Insured
@@ -85,6 +88,11 @@ def sample_data():
 
 @pytest.mark.django_db
 def test_dashboard_counters(client, sample_data):
+    user = User.objects.create_user(username="boss", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="dg"))
+    assert client.login(username="boss", password="pwd")
     url = reverse("dashboard:dg_counters")
     resp = client.get(url)
     data = resp.json()
@@ -96,6 +104,11 @@ def test_dashboard_counters(client, sample_data):
 
 @pytest.mark.django_db
 def test_series_policies(client, sample_data):
+    user = User.objects.create_user(username="boss", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="dg"))
+    assert client.login(username="boss", password="pwd")
     today = timezone.localdate()
     yesterday = today - timedelta(days=1)
     url = reverse("dashboard:dg_series") + f"?metric=policies&period=day&date_from={yesterday}&date_to={today}"
@@ -107,6 +120,11 @@ def test_series_policies(client, sample_data):
 
 @pytest.mark.django_db
 def test_series_claims_status(client, sample_data):
+    user = User.objects.create_user(username="boss2", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="dg"))
+    assert client.login(username="boss2", password="pwd")
     url = reverse("dashboard:dg_series") + "?metric=claims_status"
     resp = client.get(url)
     data = resp.json()
@@ -115,5 +133,10 @@ def test_series_claims_status(client, sample_data):
 
 @pytest.mark.django_db
 def test_dashboard_view(client):
+    user = User.objects.create_user(username="boss3", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="dg"))
+    assert client.login(username="boss3", password="pwd")
     resp = client.get(reverse("dashboard:dg_dashboard"))
     assert resp.status_code == 200

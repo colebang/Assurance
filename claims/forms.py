@@ -13,7 +13,7 @@ class ClaimForm(forms.ModelForm):
 ClaimLineFormSet = forms.inlineformset_factory(
     Claim,
     ClaimLine,
-    fields=("policy_coverage", "line_invoice_amount", "line_approved_amount"),
+    fields=("policy_coverage", "line_invoice_amount"),
     extra=1,
     can_delete=True,
 )

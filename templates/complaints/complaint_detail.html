@@ -9,10 +9,10 @@
 {% if object.status == 'ANSWERED' %}
 <p><strong>Answer:</strong> {{ object.answer_text }}</p>
 {% endif %}
-{% if object.status == 'OPEN' %}
+{% if object.status == 'OPEN' and perms.complaints.answer_complaint %}
 <a href="{% url 'complaints:complaint_answer' object.pk %}">Answer</a>
 {% endif %}
-{% if object.status == 'ANSWERED' %}
+{% if object.status == 'ANSWERED' and perms.complaints.close_complaint %}
 <form method="post" action="{% url 'complaints:complaint_close' object.pk %}">{% csrf_token %}<button type="submit">Close</button></form>
 {% endif %}
 {% endblock %}

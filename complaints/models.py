@@ -30,3 +30,9 @@ class Complaint(models.Model):
 
     def __str__(self) -> str:  # pragma: no cover - simple representation
         return f"Complaint #{self.pk}"
+
+    class Meta:
+        permissions = [
+            ("answer_complaint", "Peut répondre à une plainte"),
+            ("close_complaint", "Peut clôturer une plainte"),
+        ]

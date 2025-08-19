@@ -1,4 +1,4 @@
-{% load static %}
+{% load static accounts_extras %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,18 +13,28 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="#">Produits</a>
-        <a href="#">Assurés</a>
-        <a href="#">Contrats</a>
-        <a href="#">Sinistres</a>
-        <a href="#">Plaintes</a>
+        {% if user|has_group:'actuaire' %}
+        <a href="{% url 'catalog:product_list' %}">Produits</a>
+        {% endif %}
+        {% if user|has_group:'commercial' %}
+        <a href="{% url 'crm:insured_list' %}">Assurés</a>
+        <a href="{% url 'underwriting:policy_list' %}">Contrats</a>
+        {% endif %}
+        {% if user|has_group:'redacteur' or user|has_group:'gestionnaire' or user|has_group:'comptable' %}
+        <a href="{% url 'claims:claim_list' %}">Sinistres</a>
+        {% endif %}
+        {% if user|has_group:'commercial' or user|has_group:'gestionnaire' %}
+        <a href="{% url 'complaints:complaint_list' %}">Plaintes</a>
+        {% endif %}
+        {% if user|has_group:'commercial' %}
         <a href="#">Imports</a>
-        <a href="#">Dashboard</a>
-
+        {% endif %}
+        {% if user|has_group:'dg' %}
+        <a href="{% url 'dashboard:dg_dashboard' %}">Dashboard</a>
+        {% endif %}
         {% if user.is_authenticated %}
         <a href="{% url 'accounts:logout' %}">Se déconnecter</a>
         {% endif %}
-
     </nav>
     <div class="container">
         {% include 'includes/messages.html' %}

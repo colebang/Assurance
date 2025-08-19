@@ -4,6 +4,9 @@ from django.urls import reverse
 from django.utils import timezone
 from datetime import date, datetime, timedelta
 
+from django.contrib.auth.models import User, Group
+from django.utils import timezone
+from django.urls import reverse
 from catalog.models import Product, Coverage
 from crm.models import Insured
 from underwriting.models import Policy, PolicyCoverage
@@ -85,6 +88,11 @@ def test_complaint_creation_and_mismatch(prepared_claim):
 def test_answer_requires_text_and_updates_status(client, prepared_claim):
     claim = prepared_claim
     complaint = Complaint.objects.create(insured=claim.policy.insured, claim=claim, message="help")
+    user = User.objects.create_user(username="gest", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="gestionnaire"))
+    assert client.login(username="gest", password="pwd")
     url = reverse("complaints:complaint_answer", args=[complaint.pk])
     # missing text
     client.post(url, {"answer_text": ""})
@@ -101,6 +109,11 @@ def test_answer_requires_text_and_updates_status(client, prepared_claim):
 def test_close_only_after_answer(client, prepared_claim):
     claim = prepared_claim
     complaint = Complaint.objects.create(insured=claim.policy.insured, claim=claim, message="help")
+    user = User.objects.create_user(username="gest", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="gestionnaire"))
+    assert client.login(username="gest", password="pwd")
     close_url = reverse("complaints:complaint_close", args=[complaint.pk])
     resp = client.post(close_url)
     assert resp.status_code == 404
@@ -114,6 +127,11 @@ def test_close_only_after_answer(client, prepared_claim):
 def test_list_view_and_filter(client, prepared_claim):
     claim = prepared_claim
     Complaint.objects.create(insured=claim.policy.insured, claim=claim, message="x")
+    user = User.objects.create_user(username="comm", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="commercial"))
+    assert client.login(username="comm", password="pwd")
     url = reverse("complaints:complaint_list")
     resp = client.get(url)
     assert resp.status_code == 200

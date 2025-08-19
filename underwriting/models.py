@@ -37,7 +37,6 @@ class Policy(models.Model):
     vehicle = models.ForeignKey(
         Vehicle, related_name="policies", null=True, blank=True, on_delete=models.SET_NULL
     )
-
     premium_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -48,6 +47,9 @@ class Policy(models.Model):
             models.Index(fields=["status"]),
             models.Index(fields=["insured", "product"]),
             models.Index(fields=["start_date", "end_date"]),
+        ]
+        permissions = [
+            ("activate_policy", "Peut activer une police"),
         ]
 
     def __str__(self) -> str:  # pragma: no cover - simple repr

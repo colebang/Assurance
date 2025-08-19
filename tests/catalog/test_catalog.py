@@ -2,6 +2,8 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 
+from django.contrib.auth.models import User, Group
+
 from catalog.models import Coverage, Product
 
 
@@ -34,6 +36,11 @@ def test_coverage_unique_per_product_name():
 
 @pytest.mark.django_db
 def test_product_list_status_code(client):
+    user = User.objects.create_user(username="act", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="actuaire"))
+    assert client.login(username="act", password="pwd")
     url = reverse("catalog:product_list")
     response = client.get(url)
     assert response.status_code == 200

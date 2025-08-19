@@ -3,6 +3,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
+from accounts.permissions import RoleRequiredMixin
 
 from .models import Claim
 from .forms import ClaimForm, ClaimLineFormSet, AttachmentFormSet
@@ -10,7 +13,8 @@ from .filters import ClaimFilter
 from .services import approve_claim, compute_eligibility
 
 
-class ClaimListView(ListView):
+class ClaimListView(RoleRequiredMixin, ListView):
+    required_roles = ("redacteur", "gestionnaire")
     model = Claim
     template_name = "claims/claim_list.html"
     context_object_name = "claims"
@@ -27,13 +31,15 @@ class ClaimListView(ListView):
         return ctx
 
 
-class ClaimDetailView(DetailView):
+class ClaimDetailView(RoleRequiredMixin, DetailView):
+    required_roles = ("redacteur", "gestionnaire")
     model = Claim
     template_name = "claims/claim_detail.html"
     context_object_name = "claim"
 
 
-class ClaimCreateView(CreateView):
+class ClaimCreateView(RoleRequiredMixin, CreateView):
+    required_roles = ("redacteur", "gestionnaire")
     model = Claim
     form_class = ClaimForm
     template_name = "claims/claim_form.html"
@@ -69,7 +75,9 @@ class ClaimCreateView(CreateView):
         return self.form_invalid(form)
 
 
-class ClaimApproveView(View):
+class ClaimApproveView(PermissionRequiredMixin, View):
+    permission_required = "claims.approve_claim"
+
     def post(self, request, pk):
         claim = get_object_or_404(Claim, pk=pk)
         approve_claim(claim)
@@ -77,7 +85,9 @@ class ClaimApproveView(View):
         return redirect("claims:claim_detail", pk=pk)
 
 
-class ClaimRejectView(View):
+class ClaimRejectView(PermissionRequiredMixin, View):
+    permission_required = "claims.reject_claim"
+
     def post(self, request, pk):
         claim = get_object_or_404(Claim, pk=pk)
         claim.status = Claim.Status.REJECTED

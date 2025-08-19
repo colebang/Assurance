@@ -1,6 +1,8 @@
 import pytest
+import pytest
 from django.urls import reverse
 from django.db import IntegrityError
+from django.contrib.auth.models import User, Group
 
 from crm.models import Insured
 from crm.templatetags.crm_extras import mask_cnib
@@ -37,6 +39,11 @@ def test_cnib_uniqueness():
 
 @pytest.mark.django_db
 def test_insured_list_view(client):
+    user = User.objects.create_user(username="comm", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="commercial"))
+    assert client.login(username="comm", password="pwd")
     url = reverse("crm:insured_list")
     response = client.get(url)
     assert response.status_code == 200
@@ -50,6 +57,11 @@ def test_cnib_masked_in_list(client):
         birth_date="1990-01-01",
         cnib="CNIB999888",
     )
+    user = User.objects.create_user(username="comm2", password="pwd")
+    user.userprofile.require_password_change = False
+    user.userprofile.save()
+    user.groups.add(Group.objects.get(name="commercial"))
+    assert client.login(username="comm2", password="pwd")
     url = reverse("crm:insured_list")
     response = client.get(url)
     content = response.content.decode()

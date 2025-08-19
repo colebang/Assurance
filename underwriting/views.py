@@ -6,12 +6,15 @@ from django.views.generic import (
     UpdateView,
 )
 
+from accounts.permissions import RoleRequiredMixin
+
 from .filters import PolicyFilter
 from .forms import PolicyForm, VehicleForm
 from .models import Policy, Vehicle
 
 
-class PolicyListView(ListView):
+class PolicyListView(RoleRequiredMixin, ListView):
+    required_roles = ("commercial",)
     model = Policy
     template_name = "underwriting/policy_list.html"
     context_object_name = "policies"
@@ -27,41 +30,47 @@ class PolicyListView(ListView):
         return context
 
 
-class PolicyDetailView(DetailView):
+class PolicyDetailView(RoleRequiredMixin, DetailView):
+    required_roles = ("commercial",)
     model = Policy
     template_name = "underwriting/policy_detail.html"
     context_object_name = "policy"
 
 
-class PolicyCreateView(CreateView):
+class PolicyCreateView(RoleRequiredMixin, CreateView):
+    required_roles = ("commercial",)
     model = Policy
     form_class = PolicyForm
     template_name = "underwriting/policy_form.html"
     success_url = reverse_lazy("underwriting:policy_list")
 
 
-class PolicyUpdateView(UpdateView):
+class PolicyUpdateView(RoleRequiredMixin, UpdateView):
+    required_roles = ("commercial",)
     model = Policy
     form_class = PolicyForm
     template_name = "underwriting/policy_form.html"
     success_url = reverse_lazy("underwriting:policy_list")
 
 
-class VehicleListView(ListView):
+class VehicleListView(RoleRequiredMixin, ListView):
+    required_roles = ("commercial",)
     model = Vehicle
     template_name = "underwriting/vehicle_list.html"
     context_object_name = "vehicles"
     queryset = Vehicle.objects.select_related("insured").order_by("plate_number")
 
 
-class VehicleCreateView(CreateView):
+class VehicleCreateView(RoleRequiredMixin, CreateView):
+    required_roles = ("commercial",)
     model = Vehicle
     form_class = VehicleForm
     template_name = "underwriting/vehicle_form.html"
     success_url = reverse_lazy("underwriting:vehicle_list")
 
 
-class VehicleUpdateView(UpdateView):
+class VehicleUpdateView(RoleRequiredMixin, UpdateView):
+    required_roles = ("commercial",)
     model = Vehicle
     form_class = VehicleForm
     template_name = "underwriting/vehicle_form.html"
