@@ -34,6 +34,7 @@
   <li>No payments</li>
   {% endfor %}
 </ul>
+
 {% if claim.status == 'SUBMITTED' %}
 <form action="{% url 'claims:claim_approve' claim.pk %}" method="post" style="display:inline">
   {% csrf_token %}
@@ -43,7 +44,9 @@
   {% csrf_token %}
   <button type="submit">Reject</button>
 </form>
+
 {% elif claim.status == 'APPROVED' and claim.paid_amount < claim.reimbursable_amount %}
 <a href="{% url 'finance:payment_create' claim.pk %}">Pay</a>
+
 {% endif %}
 {% endblock %}
