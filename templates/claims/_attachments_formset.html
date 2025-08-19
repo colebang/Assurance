@@ -1,0 +1,9 @@
+{{ att_formset.management_form }}
+<table>
+  {% for form in att_formset %}
+  <tr>
+    <td>{{ form.file }}</td>
+    <td>{{ form.DELETE }}</td>
+  </tr>
+  {% endfor %}
+</table>

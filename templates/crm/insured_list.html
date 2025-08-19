@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load crm_extras %}
+{% block title %}Insureds{% endblock %}
+{% block content %}
+<h1>Insureds</h1>
+<form method="get">
+  {{ filter.form.as_p }}
+  <button type="submit">Filter</button>
+</form>
+<p><a href="{% url 'crm:insured_create' %}">New Insured</a></p>
+<table class="datatable">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Full name</th>
+      <th>CNIB</th>
+      <th>Birth date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for insured in insureds %}
+    <tr>
+      <td>{{ insured.code }}</td>
+      <td>{{ insured.full_name }}</td>
+      <td>{{ insured.cnib|mask_cnib }}</td>
+      <td>{{ insured.birth_date }}</td>
+      <td>
+        <a href="{% url 'crm:insured_detail' insured.pk %}">View</a>
+        <a href="{% url 'crm:insured_update' insured.pk %}">Edit</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
