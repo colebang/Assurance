@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}New Claim{% endblock %}
+{% block content %}
+<h2>New Claim</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form|crispy }}
+  {% include 'claims/_lines_formset.html' with line_formset=line_formset %}
+  {% include 'claims/_attachments_formset.html' with att_formset=att_formset %}
+  <button type="submit">Save</button>
+</form>
+{% endblock %}

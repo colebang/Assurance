@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+<h1>Products</h1>
+<form method="get">
+  {{ filter.form.as_p }}
+  <button type="submit">Filter</button>
+</form>
+<p><a href="{% url 'catalog:product_create' %}">New Product</a></p>
+<table class="datatable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Coverage rate</th>
+      <th>Waiting days</th>
+      <th>Duration days</th>
+      <th>Active</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for product in products %}
+    <tr>
+      <td>{{ product.name }}</td>
+      <td>{{ product.get_type_display }}</td>
+      <td>{{ product.default_coverage_rate }}</td>
+      <td>{{ product.waiting_days }}</td>
+      <td>{{ product.duration_days }}</td>
+      <td>{{ product.is_active }}</td>
+      <td><a href="{% url 'catalog:product_update' product.pk %}">Edit</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
