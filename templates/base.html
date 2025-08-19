@@ -20,9 +20,11 @@
         <a href="#">Plaintes</a>
         <a href="#">Imports</a>
         <a href="#">Dashboard</a>
+
         {% if user.is_authenticated %}
         <a href="{% url 'accounts:logout' %}">Se déconnecter</a>
         {% endif %}
+
     </nav>
     <div class="container">
         {% include 'includes/messages.html' %}

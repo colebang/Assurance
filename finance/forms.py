@@ -1,6 +1,8 @@
 from django import forms
 
+
 from .models import Payment, Premium, Receipt
+
 
 
 class PaymentForm(forms.ModelForm):
@@ -18,6 +20,7 @@ class PaymentForm(forms.ModelForm):
         if amount is None or amount <= 0 or amount > remaining:
             raise forms.ValidationError("Invalid amount")
         return amount
+
 
 
 class PremiumForm(forms.ModelForm):
@@ -44,3 +47,4 @@ class ReceiptForm(forms.ModelForm):
         if amount is None or amount <= 0 or amount > remaining:
             raise forms.ValidationError("Invalid amount")
         return amount
+

@@ -29,8 +29,10 @@ urlpatterns = [
     path('finance/', include('finance.urls')),
     path('complaints/', include('complaints.urls')),
     path('dashboard/', include('dashboard.urls')),
+
     path('audit/', include('audit.urls')),
     path('accounts/', include('accounts.urls')),
+
     path('admin/', admin.site.urls),
 ]
 

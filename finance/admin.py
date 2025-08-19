@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+
 from .models import Payment, Premium, Receipt
 
 
@@ -8,6 +9,7 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = ("claim", "amount", "mode", "paid_at", "reference", "created_by")
     list_filter = ("mode", "paid_at")
     search_fields = ("reference", "claim__public_code")
+
 
 
 @admin.register(Premium)
@@ -22,3 +24,4 @@ class ReceiptAdmin(admin.ModelAdmin):
     list_display = ("premium", "amount", "mode", "paid_at", "reference", "received_by")
     list_filter = ("mode", "paid_at")
     search_fields = ("reference", "premium__policy__policy_number")
+

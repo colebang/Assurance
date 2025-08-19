@@ -3,14 +3,17 @@ from __future__ import annotations
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Sum
+
 from django.utils import timezone
 
 from claims.models import Claim
+
 
 from audit.models import AuditLog
 from audit.services import audit_log
 
 from .models import Payment, Premium, Receipt
+
 
 
 def pay_claim(
@@ -113,3 +116,4 @@ def receive_premium(
             user=received_by,
         )
     return receipt
+
