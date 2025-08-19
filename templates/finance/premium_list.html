@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Premiums{% endblock %}
+{% block content %}
+<h2>Premiums</h2>
+<form method="get">
+  {{ filter.form.as_p }}
+  <button type="submit">Filter</button>
+</form>
+<table class="datatable">
+  <thead>
+    <tr>
+      <th>Policy</th>
+      <th>Amount due</th>
+      <th>Status</th>
+      <th>Due date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for prem in premiums %}
+    <tr>
+      <td>{{ prem.policy.policy_number }}</td>
+      <td>{{ prem.amount_due }}</td>
+      <td>{{ prem.status }}</td>
+      <td>{{ prem.due_date }}</td>
+      <td><a href="{% url 'finance:premium_detail' prem.pk %}">View</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

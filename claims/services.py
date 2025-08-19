@@ -2,6 +2,10 @@ from __future__ import annotations
 from django.db import transaction
 from django.utils import timezone
 
+
+from audit.models import AuditLog
+from audit.services import audit_log
+
 from .models import Claim
 
 
@@ -34,7 +38,15 @@ def approve_claim(claim: Claim) -> Claim:
             pc = line.policy_coverage
             pc.remaining_limit -= amount
             pc.save(update_fields=["remaining_limit"])
+
+        old_status = claim.status
         claim.status = Claim.Status.APPROVED
         claim.approved_at = timezone.now()
         claim.save(update_fields=["status", "approved_at"])
+        audit_log(
+            AuditLog.Action.STATUS_CHANGE,
+            claim,
+            diff={"status": [old_status, claim.status]},
+        )
+
     return claim

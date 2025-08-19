@@ -15,6 +15,9 @@ class PolicyForm(forms.ModelForm):
             "start_date",
             "end_date",
             "vehicle",
+
+            "premium_amount",
+
         ]
 
     def __init__(self, *args, **kwargs):

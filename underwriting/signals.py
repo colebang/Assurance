@@ -5,6 +5,9 @@ from catalog.models import Coverage
 
 from .models import Policy, PolicyCoverage
 
+from finance.services import create_policy_premium
+from django.core.exceptions import ValidationError
+
 
 @receiver(post_save, sender=Policy)
 def create_policy_coverages(sender, instance, created, **kwargs):
@@ -21,3 +24,14 @@ def create_policy_coverages(sender, instance, created, **kwargs):
             waiting_days=instance.product.waiting_days,
             remaining_limit=cov.annual_limit,
         )
+
+
+
+@receiver(post_save, sender=Policy)
+def create_policy_premium_on_active(sender, instance, **kwargs):
+    if instance.status == Policy.Status.ACTIVE:
+        try:
+            create_policy_premium(instance)
+        except ValidationError:
+            pass
+

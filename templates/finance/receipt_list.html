@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Receipts{% endblock %}
+{% block content %}
+<h2>Receipts</h2>
+<form method="get">
+  {{ filter.form.as_p }}
+  <button type="submit">Filter</button>
+</form>
+<table class="datatable">
+  <thead>
+    <tr>
+      <th>Policy</th>
+      <th>Amount</th>
+      <th>Mode</th>
+      <th>Paid at</th>
+      <th>Reference</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in receipts %}
+    <tr>
+      <td>{{ r.premium.policy.policy_number }}</td>
+      <td>{{ r.amount }}</td>
+      <td>{{ r.mode }}</td>
+      <td>{{ r.paid_at }}</td>
+      <td>{{ r.reference }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

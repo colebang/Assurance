@@ -37,6 +37,8 @@ class Policy(models.Model):
     vehicle = models.ForeignKey(
         Vehicle, related_name="policies", null=True, blank=True, on_delete=models.SET_NULL
     )
+
+    premium_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

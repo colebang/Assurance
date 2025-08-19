@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Premium Detail{% endblock %}
+{% block content %}
+<h2>Premium {{ premium.policy.policy_number }}</h2>
+<p>Amount due: {{ premium.amount_due }}</p>
+<p>Status: {{ premium.status }}</p>
+<p>Due date: {{ premium.due_date }}</p>
+<p>Paid: {{ paid_total }}</p>
+<p>Remaining: {{ remaining }}</p>
+<a href="{% url 'finance:receipt_create' premium.pk %}">Encaisser</a>
+<table class="datatable">
+  <thead>
+    <tr><th>Amount</th><th>Mode</th><th>Paid at</th></tr>
+  </thead>
+  <tbody>
+    {% for r in premium.receipts.all %}
+    <tr><td>{{ r.amount }}</td><td>{{ r.mode }}</td><td>{{ r.paid_at }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
