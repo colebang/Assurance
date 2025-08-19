@@ -1,5 +1,7 @@
 from django.contrib.auth.views import PasswordChangeView, LogoutView
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views import View
 
 
 class ForcePasswordChangeView(PasswordChangeView):
@@ -21,3 +23,22 @@ class SimpleLogoutView(LogoutView):
 
     def get(self, request, *args, **kwargs):  # pragma: no cover - thin wrapper
         return self.post(request, *args, **kwargs)
+
+
+class PostLoginRedirectView(View):
+    role_map = {
+        "dg": "/dashboard/dg/",
+        "rh": "/workspaces/rh/",
+        "actuaire": "/workspaces/actuaire/",
+        "commercial": "/workspaces/commercial/",
+        "redacteur": "/workspaces/redacteur/",
+        "gestionnaire": "/workspaces/gestionnaire/",
+        "comptable": "/workspaces/comptable/",
+    }
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        for role, url in self.role_map.items():
+            if user.groups.filter(name=role).exists():
+                return redirect(url)
+        return redirect("/")

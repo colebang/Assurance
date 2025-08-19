@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Espace Actuaire</h1>
+<div class="actions">
+  <a href="{% url 'catalog:product_create' %}">Nouveau produit</a>
+  <a href="{% url 'catalog:coverage_create' %}">Nouvelle garantie</a>
+  <a href="{% url 'catalog:product_list' %}">Liste produits/garanties</a>
+</div>
+<h2>Produits actifs</h2>
+<table class="datatable">
+  <thead><tr><th>Nom</th><th>Description</th></tr></thead>
+  <tbody>
+  {% for product in active_products %}
+    <tr><td>{{ product.name }}</td><td>{{ product.description }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucun</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h2>Garanties par produit</h2>
+<table class="datatable">
+  <thead><tr><th>Produit</th><th>Nombre de garanties</th></tr></thead>
+  <tbody>
+  {% for item in coverage_counts %}
+    <tr><td>{{ item.name }}</td><td>{{ item.coverage_count }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucun</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "finance",
     "imports",
     "dashboard",
+    "workspaces",
     "audit",
 ]
 
@@ -135,7 +136,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Authentication settings
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/workspaces/me/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

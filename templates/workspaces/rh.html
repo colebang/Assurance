@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Espace RH</h1>
+<div class="actions">
+  <a href="/admin/auth/user/add/">Créer un utilisateur (admin)</a>
+  <a href="/admin/auth/user/">Liste des utilisateurs</a>
+  <a href="/admin/accounts/userprofile/?require_password_change__exact=1">Profils à forcer changement MDP</a>
+</div>
+<p>Utilisateurs qui doivent changer leur mot de passe: {{ password_change_required_count }}</p>
+<table class="datatable">
+  <thead><tr><th>Utilisateur</th></tr></thead>
+  <tbody>
+  {% for profile in profiles %}
+    <tr><td>{{ profile.user.username }}</td></tr>
+  {% empty %}
+    <tr><td>Aucun</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
