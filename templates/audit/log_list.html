@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Audit Logs{% endblock %}
+{% block content %}
+<h2>Audit Logs</h2>
+<form method="get">
+  {{ filter.form.as_p }}
+  <button type="submit">Filter</button>
+</form>
+<table class="datatable">
+  <thead>
+    <tr>
+      <th>Object</th>
+      <th>Action</th>
+      <th>User</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for log in logs %}
+    <tr>
+      <td>{{ log.object_type }} #{{ log.object_id }}</td>
+      <td>{{ log.action }}</td>
+      <td>{{ log.performed_by }}</td>
+      <td>{{ log.performed_at }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

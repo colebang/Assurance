@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Coverages{% endblock %}
+{% block content %}
+<h1>Coverages</h1>
+<form method="get">
+  {{ filter.form.as_p }}
+  <button type="submit">Filter</button>
+</form>
+<p><a href="{% url 'catalog:coverage_create' %}">New Coverage</a></p>
+<table class="datatable">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Name</th>
+      <th>Annual limit</th>
+      <th>Coverage rate</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for coverage in coverages %}
+    <tr>
+      <td>{{ coverage.product.name }}</td>
+      <td>{{ coverage.name }}</td>
+      <td>{{ coverage.annual_limit }}</td>
+      <td>{{ coverage.coverage_rate }}</td>
+      <td><a href="{% url 'catalog:coverage_update' coverage.pk %}">Edit</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

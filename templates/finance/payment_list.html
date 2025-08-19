@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Payments{% endblock %}
+{% block content %}
+<h2>Payments</h2>
+<form method="get">
+  {{ filter.form.as_p }}
+  <button type="submit">Filter</button>
+</form>
+<table class="datatable">
+  <thead>
+    <tr>
+      <th>Claim</th>
+      <th>Amount</th>
+      <th>Mode</th>
+      <th>Paid at</th>
+      <th>Reference</th>
+      <th>Created by</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for pay in payments %}
+    <tr>
+      <td>{{ pay.claim.public_code }}</td>
+      <td>{{ pay.amount }}</td>
+      <td>{{ pay.mode }}</td>
+      <td>{{ pay.paid_at }}</td>
+      <td>{{ pay.reference }}</td>
+      <td>{{ pay.created_by }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
