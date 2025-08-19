@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from catalog.models import Coverage
 
 from .models import Policy, PolicyCoverage
+
 from finance.services import create_policy_premium
 from django.core.exceptions import ValidationError
 
@@ -25,6 +26,7 @@ def create_policy_coverages(sender, instance, created, **kwargs):
         )
 
 
+
 @receiver(post_save, sender=Policy)
 def create_policy_premium_on_active(sender, instance, **kwargs):
     if instance.status == Policy.Status.ACTIVE:
@@ -32,3 +34,4 @@ def create_policy_premium_on_active(sender, instance, **kwargs):
             create_policy_premium(instance)
         except ValidationError:
             pass
+

@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+
 from django.views.generic import DetailView, FormView, ListView
 from django.db.models import Sum
 
@@ -9,6 +10,7 @@ from .forms import PaymentForm, ReceiptForm
 from .filters import PaymentFilter, PremiumFilter, ReceiptFilter
 from .models import Payment, Premium, Receipt
 from .services import pay_claim, receive_premium
+
 
 
 class PaymentCreateView(FormView):

@@ -6,6 +6,7 @@ from django.utils import timezone
 from claims.models import Claim
 
 
+
 class Premium(models.Model):
     class Status(models.TextChoices):
         DUE = "DUE", "Due"
@@ -60,6 +61,7 @@ class Receipt(models.Model):
 
     class Meta:
         ordering = ["-paid_at"]
+
 
 
 class Payment(models.Model):
