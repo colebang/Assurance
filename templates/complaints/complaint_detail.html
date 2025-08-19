@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Complaint Detail{% endblock %}
+{% block content %}
+<h2>Complaint Detail</h2>
+<p><strong>Assuré:</strong> {{ object.insured }}</p>
+<p><strong>Sinistre:</strong> {% if object.claim %}{{ object.claim.public_code }}{% endif %}</p>
+<p><strong>Message:</strong> {{ object.message }}</p>
+<p><strong>Status:</strong> {{ object.status }}</p>
+{% if object.status == 'ANSWERED' %}
+<p><strong>Answer:</strong> {{ object.answer_text }}</p>
+{% endif %}
+{% if object.status == 'OPEN' %}
+<a href="{% url 'complaints:complaint_answer' object.pk %}">Answer</a>
+{% endif %}
+{% if object.status == 'ANSWERED' %}
+<form method="post" action="{% url 'complaints:complaint_close' object.pk %}">{% csrf_token %}<button type="submit">Close</button></form>
+{% endif %}
+{% endblock %}

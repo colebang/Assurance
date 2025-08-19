@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}DG Dashboard{% endblock %}
+{% block content %}
+<h2>DG Dashboard</h2>
+<div id="counters">
+  <div id="policies_today">0</div>
+  <div id="complaints_today">0</div>
+  <div id="claims_submitted_today">0</div>
+  <div id="claims_approved_today">0</div>
+</div>
+<div>
+  <canvas id="policies_chart"></canvas>
+  <canvas id="claims_chart"></canvas>
+</div>
+<script>
+async function fetchCounters(){
+  const r = await fetch("{% url 'dashboard:dg_counters' %}");
+  const data = await r.json();
+  for(const k in data){
+    const el = document.getElementById(k);
+    if(el) el.innerText = data[k];
+  }
+}
+fetchCounters();
+setInterval(fetchCounters,10000);
+</script>
+{% endblock %}

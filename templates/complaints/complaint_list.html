@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Complaints{% endblock %}
+{% block content %}
+<h2>Complaints</h2>
+<form method="get">
+  {{ filter.form.as_p }}
+  <button type="submit">Filter</button>
+</form>
+<table class="datatable">
+  <thead>
+    <tr>
+      <th>Assuré</th>
+      <th>Sinistre</th>
+      <th>Statut</th>
+      <th>Déposée le</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for complaint in complaints %}
+    <tr>
+      <td>{{ complaint.insured }}</td>
+      <td>{% if complaint.claim %}{{ complaint.claim.public_code }}{% endif %}</td>
+      <td>{{ complaint.status }}</td>
+      <td>{{ complaint.filed_at }}</td>
+      <td><a href="{% url 'complaints:complaint_detail' complaint.pk %}">Detail</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'complaints:complaint_create' %}">New complaint</a>
+{% endblock %}
