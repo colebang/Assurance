@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Insured {{ insured.code }}{% endblock %}
+{% block content %}
+<h1>{{ insured.full_name }}</h1>
+<ul>
+  <li>Code: {{ insured.code }}</li>
+  <li>CNIB: {{ insured.cnib }}</li>
+  <li>Birth date: {{ insured.birth_date }}</li>
+  <li>Phone: {{ insured.phone }}</li>
+  <li>Email: {{ insured.email }}</li>
+</ul>
+<p><a href="{% url 'crm:insured_update' insured.pk %}">Edit</a></p>
+{% endblock %}
