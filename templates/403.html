@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Erreur 403{% endblock %}
+{% block content %}
+<h1>Erreur 403</h1>
+<p>Vous n’avez pas accès à cette page.</p>
+<a href="{% url 'home' %}">Retour à l'accueil</a>
+{% endblock %}
