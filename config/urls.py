@@ -22,9 +22,10 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="home.html"), name="home"),
-    path("catalog/", include("catalog.urls")),
-    path("admin/", admin.site.urls),
+    path('', TemplateView.as_view(template_name="home.html"), name="home"),
+    path('catalog/', include('catalog.urls')),
+    path('crm/', include('crm.urls')),
+    path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
