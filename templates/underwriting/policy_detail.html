@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Policy {{ policy.policy_number }}{% endblock %}
+{% block content %}
+<h1>Policy {{ policy.policy_number }}</h1>
+<p>Insured: {{ policy.insured }}</p>
+<p>Product: {{ policy.product }}</p>
+<p>Status: {{ policy.get_status_display }}</p>
+<p>Start: {{ policy.start_date }} End: {{ policy.end_date }}</p>
+
+<h2>Coverages</h2>
+<table class="datatable">
+  <thead>
+    <tr>
+      <th>Coverage</th>
+      <th>Annual limit</th>
+      <th>Remaining</th>
+      <th>Rate</th>
+      <th>Waiting days</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for pc in policy.coverages.all %}
+    <tr>
+      <td>{{ pc.coverage.name }}</td>
+      <td>{{ pc.annual_limit }}</td>
+      <td>{{ pc.remaining_limit }}</td>
+      <td>{{ pc.coverage_rate }}</td>
+      <td>{{ pc.waiting_days }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Assurance{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#">Produits</a>
+        <a href="#">Assurés</a>
+        <a href="#">Contrats</a>
+        <a href="#">Sinistres</a>
+        <a href="#">Plaintes</a>
+        <a href="#">Imports</a>
+        <a href="#">Dashboard</a>
+    </nav>
+    <div class="container">
+        {% include 'includes/messages.html' %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
