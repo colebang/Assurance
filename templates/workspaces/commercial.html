@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Espace Commercial</h1>
+<div class="actions">
+  <a href="{% url 'crm:insured_create' %}">Nouvel assuré</a>
+  <a href="{% url 'underwriting:policy_create' %}">Nouveau contrat</a>
+  <a href="#">Imports Excel</a>
+  <a href="{% url 'complaints:complaint_create' %}">Déposer une plainte</a>
+</div>
+<h2>Assurés créés récemment</h2>
+<table class="datatable">
+  <thead><tr><th>Code</th><th>Nom</th></tr></thead>
+  <tbody>
+  {% for insured in recent_insured %}
+    <tr><td>{{ insured.code }}</td><td>{{ insured.full_name }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucun</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h2>Contrats en DRAFT</h2>
+<table class="datatable">
+  <thead><tr><th>Numéro</th><th>Assuré</th></tr></thead>
+  <tbody>
+  {% for policy in draft_policies %}
+    <tr><td>{{ policy.policy_number }}</td><td>{{ policy.insured.full_name }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucun</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h2>Contrats à échéance J-30/J-7</h2>
+<table class="datatable">
+  <thead><tr><th>Numéro</th><th>Fin</th></tr></thead>
+  <tbody>
+  {% for policy in expiring_policies %}
+    <tr><td>{{ policy.policy_number }}</td><td>{{ policy.end_date }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucun</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

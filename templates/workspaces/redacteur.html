@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Espace Rédacteur</h1>
+<div class="actions">
+  <a href="{% url 'claims:claim_create' %}">Déclarer un sinistre</a>
+  <a href="{% url 'claims:claim_list' %}">Mes brouillons</a>
+  <a href="{% url 'claims:claim_list' %}">Mes dépôts du jour</a>
+</div>
+<h2>Sinistres soumis</h2>
+<table class="datatable">
+  <thead><tr><th>Code</th><th>Police</th></tr></thead>
+  <tbody>
+  {% for claim in my_claims %}
+    <tr><td>{{ claim.public_code }}</td><td>{{ claim.policy.policy_number }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucun</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h2>Déclarations du jour</h2>
+<table class="datatable">
+  <thead><tr><th>Code</th><th>Heure</th></tr></thead>
+  <tbody>
+  {% for claim in today_claims %}
+    <tr><td>{{ claim.public_code }}</td><td>{{ claim.declared_at }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucun</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

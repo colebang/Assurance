@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Espace Gestionnaire</h1>
+<div class="actions">
+  <a href="{% url 'claims:claim_list' %}">Sinistres SUBMITTED</a>
+  <a href="{% url 'complaints:complaint_list' %}">Plaintes à répondre</a>
+  <a href="{% url 'complaints:complaint_list' %}">SLA en retard</a>
+</div>
+<h2>Sinistres soumis</h2>
+<table class="datatable">
+  <thead><tr><th>Code</th><th>Assuré</th></tr></thead>
+  <tbody>
+  {% for claim in submitted_claims %}
+    <tr><td>{{ claim.public_code }}</td><td>{{ claim.policy.insured.full_name }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucun</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h2>Plaintes ouvertes</h2>
+<table class="datatable">
+  <thead><tr><th>Assuré</th><th>Date</th></tr></thead>
+  <tbody>
+  {% for complaint in open_complaints %}
+    <tr><td>{{ complaint.insured.full_name }}</td><td>{{ complaint.filed_at }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucune</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h2>Alertes SLA</h2>
+<table class="datatable">
+  <thead><tr><th>Assuré</th><th>Date</th></tr></thead>
+  <tbody>
+  {% for complaint in sla_alerts %}
+    <tr><td>{{ complaint.insured.full_name }}</td><td>{{ complaint.filed_at }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucune</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Espace Comptable</h1>
+<div class="actions">
+  <a href="#">Primes à encaisser</a>
+  <a href="{% url 'finance:receipt_list' %}">Encaisser une prime</a>
+  <a href="{% url 'finance:payment_list' %}">Paiements sinistres en attente</a>
+</div>
+<h2>Primes à encaisser</h2>
+<table class="datatable">
+  <thead><tr><th>Contrat</th><th>Montant</th></tr></thead>
+  <tbody>
+  {% for premium in due_premiums %}
+    <tr><td>{{ premium.policy.policy_number }}</td><td>{{ premium.amount_due }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucune</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h2>Sinistres approuvés non payés</h2>
+<table class="datatable">
+  <thead><tr><th>Code</th><th>Montant</th></tr></thead>
+  <tbody>
+  {% for claim in approved_claims %}
+    <tr><td>{{ claim.public_code }}</td><td>{{ claim.reimbursable_amount }}</td></tr>
+  {% empty %}
+    <tr><td colspan="2">Aucun</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
