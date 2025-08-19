@@ -1,0 +1,11 @@
+{% load crispy_forms_tags %}
+{{ line_formset.management_form }}
+<table>
+  {% for form in line_formset %}
+  <tr>
+    <td>{{ form.policy_coverage }}</td>
+    <td>{{ form.line_invoice_amount }}</td>
+    <td>{{ form.DELETE }}</td>
+  </tr>
+  {% endfor %}
+</table>
