@@ -24,6 +24,8 @@ class Claim(models.Model):
     invoice_amount = models.DecimalField(max_digits=12, decimal_places=2)
     reimbursable_amount = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0"))
     approved_at = models.DateTimeField(null=True, blank=True)
+    paid_amount = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0"))
+    paid_at = models.DateTimeField(null=True, blank=True)
     reject_reason = models.TextField(blank=True)
 
     def clean(self):
@@ -45,6 +47,10 @@ class Claim(models.Model):
 
     def __str__(self) -> str:  # pragma: no cover - simple repr
         return self.public_code
+
+    @property
+    def approved_amount(self):  # pragma: no cover - simple alias
+        return self.reimbursable_amount
 
 
 class ClaimLine(models.Model):
